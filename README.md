@@ -14,6 +14,8 @@ From a quick look to the missing values, we also notice that the features "viola
 
 I then merged the train and test data sets with the addresses and latlons datasets. We then had for each ticket id the latitude and longitude for each sample. After a look on Google map, I defined the min and max latitude and longitude for the Detroit city and dropped any samples that stood outside these limits. Finally, I converted the 'lat' and 'lon' columns into bins of hundredth of degrees.
 
+For the features "agency_name", "violation_description", "disposition" and "state", I replaced the values that appear less than five time by a "nan". I then transformed the state into a categorical variable and got dummies values for the "agency_name", "violation_description" and "disposition".
+
 I finally applied a GradientBoostingClassifier with a GridSearch on some hyper-parameters and got a score of 77%.
 
 In the end, I only used six variables for my model and with more domain knowledge, much more feature engineering could be done to obtain a score of at least 80%. For instance, the violation code is certainly an important feature but it has to be cleaned up with care.

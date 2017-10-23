@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import cleaning as cl
+from datetime import datetime
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -17,13 +18,10 @@ latlons = pd.read_csv('datasets/latlons.csv')
 X_train, X_test, y_train = cl.clean(df_train, df_test, address, latlons)
 
 X_train.info()
-#still need to clean violation code
 
 X_train.shape
+X_test.shape
 y_train.shape
-
-X_train['judgment_amount'].value_counts()
-
 
 grid_values = {'learning_rate': [0.01, 0.1, 1], 'max_depth': [3,5]}
 clf = GradientBoostingClassifier(random_state = 0)

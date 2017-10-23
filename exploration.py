@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime
 
 train_data = pd.read_csv('datasets/train.csv', encoding = 'ISO-8859-1')
 print('shape', train_data.shape)
@@ -51,22 +52,12 @@ sum(train_data['lon'].isnull())
 # Max latitude coordinate should be 43° and min latitude 42° (100 bins)
 # Min longitude coordinate should be -83.8° and max latitude -82.7 (110 bins)
 
-# train_data['discount_amount'].value_counts()
+counts = train_data['violation_description'].value_counts()
 
-# disbin = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
-#
-# judgbins = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
-# judgbins
+train_data['violation_description'].isin(counts[counts < 5].index)
 
-# train_data['judgment_amount'].value_counts()
-
-# test = pd.cut(train_data['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
-#
-# train_data_y = train_data.copy()
-#
-# train_data_y['judgment_amount'] = test.cat.codes
-#
-# train_data_y['judgment_amount'].value_counts()
-
-# train_data_y['state'] = train_data_y['state'].replace(np.nan, "NA", regex=True).astype('category')
-# train_data_y['state'].cat.codes
+a = datetime.strptime(train_data['hearing_date'][0], "%Y-%m-%d %H:%M:%S")
+b = datetime.strptime(train_data['ticket_issued_date'][0], "%Y-%m-%d %H:%M:%S")
+a
+b
+(a - b).days
