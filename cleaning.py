@@ -37,13 +37,15 @@ def clean(df_train, df_test, address, latlons):
     df_test3['lat'] = pd.cut(df_test3['lat'], latbins, labels = range(len(latbins)-1))
     df_test3['lon'] = pd.cut(df_test3['lon'], lonbins, labels = range(len(lonbins)-1))
 
-    judgbins = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
-    df_train3['judgment_amount'] = pd.cut(df_train3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
-    df_test3['judgment_amount'] = pd.cut(df_test3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
+    # judgbins = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
+    # df_train3['judgment_amount'] = pd.cut(df_train3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
+    # df_test3['judgment_amount'] = pd.cut(df_test3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
 
     convert_columns={'compliance': 'category',
                     'state': 'category',
                     'zip_code': 'category',
+                    'lat': 'category',
+                    'lon': 'category'
                     }
 
     for df in [df_train3, df_test3]:
@@ -65,7 +67,7 @@ def clean(df_train, df_test, address, latlons):
     df_test3 = df_test3.drop(common_cols_to_drop, axis=1).set_index('ticket_id')
 
     # Convert cetegory columns to integers
-    cat_columns = ['state', 'zip_code']
+    cat_columns = ['state', 'zip_code', 'lat', 'lon']
 
     for df in [df_train3, df_test3]:
         df[cat_columns] = df[cat_columns].apply(lambda x: x.cat.codes)
