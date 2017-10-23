@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-train_data = pd.read_csv('train.csv', encoding = 'ISO-8859-1')
+train_data = pd.read_csv('datasets/train.csv', encoding = 'ISO-8859-1')
 print('shape', train_data.shape)
 train_data.info()
 
@@ -12,12 +12,12 @@ train_data.info()
 
 train_data.columns
 
-test_data = pd.read_csv('test.csv')
+test_data = pd.read_csv('datasets/test.csv')
 test_data.info()
 
 #colums not in common
 col_diff = [x for x in train_data.columns if x not in test_data.columns]
-x
+col_diff
 
 # We will have to remove all the columns that are in the train data but not in the test data.
 # Otherwise this will be considered as data leakage as th emodel might learn from data that is
@@ -27,10 +27,10 @@ x
 col_comm = [x for x in train_data.columns if x in test_data.columns]
 col_comm
 
-address =  pd.read_csv('addresses.csv')
+address =  pd.read_csv('datasets/addresses.csv')
 address.head()
 
-latlons = pd.read_csv('latlons.csv')
+latlons = pd.read_csv('datasets/latlons.csv')
 latlons.head()
 
 # Merge the addresses into the train and test DataFrames. Merge is done with the "ticket_id" column.
@@ -51,12 +51,15 @@ sum(train_data['lon'].isnull())
 # Max latitude coordinate should be 43° and min latitude 42° (100 bins)
 # Min longitude coordinate should be -83.8° and max latitude -82.7 (110 bins)
 
-latbins = np.arange(42, 43.01, 0.01)
-lonbins = np.arange(-83.8, -82.69, 0.01)
+train_data['discount_amount'].value_counts()
 
-len(latbins)
-len(range(len(latbins)))
+disbin = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
 
-x = pd.cut(train_data['lat'], latbins, labels = range(len(latbins) - 1))
-y = train_data.copy()
-y['lat'] = x
+judgbins = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
+judgbins
+
+train_data['judgment_amount']
+
+test = pd.cut(train_data['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
+
+test.value_counts()

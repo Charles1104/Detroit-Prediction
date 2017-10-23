@@ -37,6 +37,10 @@ def clean(df_train, df_test, address, latlons):
     df_test3['lat'] = pd.cut(df_test3['lat'], latbins, labels = range(len(latbins)-1))
     df_test3['lon'] = pd.cut(df_test3['lon'], lonbins, labels = range(len(lonbins)-1))
 
+    judgbins = np.unique(np.hstack((np.arange(-0.1, 1001.0, 50.1),np.arange(1000.0, 16001.0, 1000.0))))
+    df_train3['judgment_amount'] = pd.cut(df_train3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
+    df_test3['judgment_amount'] = pd.cut(df_test3['judgment_amount'], judgbins, labels = range(len(judgbins)-1))
+
     convert_columns={'compliance': 'category',
                     'state': 'category',
                     'zip_code': 'category',
@@ -50,8 +54,8 @@ def clean(df_train, df_test, address, latlons):
 
     # Remove unneeded columns from X sets
     common_cols_to_drop = ['agency_name', 'inspector_name', 'mailing_address_str_number',
-                           'violator_name', 'violation_street_number', 'violation_street_name',
-                           'mailing_address_str_name', 'address', 'admin_fee', 'violation_zip_code','country'
+                           'violator_name', 'violation_street_number', 'violation_street_name', 'violation_code',
+                           'mailing_address_str_name', 'address', 'admin_fee', 'violation_zip_code','country',
                            'state_fee', 'late_fee', 'ticket_issued_date', 'hearing_date', 'violation_description',
                            'fine_amount', 'clean_up_cost', 'disposition', 'grafitti_status', 'city', 'non_us_str_code']
 
@@ -61,7 +65,7 @@ def clean(df_train, df_test, address, latlons):
     df_test3 = df_test3.drop(common_cols_to_drop, axis=1).set_index('ticket_id')
 
     # Convert cetegory columns to integers
-    cat_columns = df_train3.select_dtypes(['category']).columns
+    cat_columns = ['state', 'zip_code']
 
     for df in [df_train3, df_test3]:
         df[cat_columns] = df[cat_columns].apply(lambda x: x.cat.codes)
